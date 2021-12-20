@@ -19,47 +19,47 @@ def add_student(students, name, group, grade, file_name):
     return students
 
 
-def show_list(students):
+def show_list(line, students):
     # Заголовок таблицы.
-    if students:
-
-        line = '+-{}-+-{}-+-{}-+-{}-+'.format(
-            '-' * 4,
-            '-' * 30,
-            '-' * 20,
-            '-' * 15
+    print(line)
+    print(
+        '| {:^4} | {:^30} | {:^20} | {:^15} |'.format(
+            "№",
+            "Ф.И.О.",
+            "Группа",
+            "Успеваемость"
         )
-        print(line)
+    )
+    print(line)
+
+    # Вывести данные о всех студентах.
+    for idx, student in enumerate(students, 1):
         print(
-            '| {:^4} | {:^30} | {:^20} | {:^15} |'.format(
-                "№",
-                "Ф.И.О.",
-                "Группа",
-                "Успеваемость"
+            '| {:>4} | {:<30} | {:<20} | {:>15} |'.format(
+                idx,
+                student.get('name', ''),
+                student.get('group', ''),
+                student.get('grade', 0)
             )
         )
-        print(line)
-
-        # Вывести данные о всех студентах.
-        for idx, student in enumerate(students, 1):
-            print(
-                '| {:>4} | {:<30} | {:<20} | {:>15} |'.format(
-                    idx,
-                    student.get('name', ''),
-                    student.get('group', ''),
-                    student.get('grade', 0)
-                )
-            )
-        print(line)
-    else:
-        print("Список студентов пуст.")
+    print(line)
 
 
-def show_selected(students):
+def show_selected(line, marks):
+    print(line)
+    print(
+        '| {:^4} | {:^30} | {:^20} | {:^15} |'.format(
+            "№",
+            "Ф.И.О.",
+            "Группа",
+            "Успеваемость"
+        )
+    )
+    print(line)
     # Инициализировать счетчик.
     count = 0
     # Проверить сведения студентов из списка.
-    for student in students:
+    for student in marks:
         grade = list(map(int, student.get('grade', '').split()))
         if sum(grade) / max(len(grade), 1) >= 4.0:
             print(
@@ -67,8 +67,7 @@ def show_selected(students):
                 '{:>1} {}'.format('группа №', student.get('group', ''))
             )
             count += 1
-    if count == 0:
-        print("Студенты с баллом 4.0 и выше не найдены.")
+    print(line)
 
 
 def load_students(file_name):
@@ -82,15 +81,22 @@ def load_students(file_name):
 @click.option("-n", "--name")
 @click.option("-g", "--group")
 @click.option("-gr", "--grade")
-@click.option("-s", "--select")
-def main(command, filename, students, name, group, grade):
+@click.option("-o", "--option")
+def main(command, filename, name, group, grade):
+    students = load_students(filename)
+    line = '+-{}-+-{}-+-{}-+-{}-+'.format(
+        '-' * 4,
+        '-' * 30,
+        '-' * 20,
+        '-' * 15
+    )
     if command == 'add':
         add_student(students, name, group, grade, filename)
         click.secho('Студент добавлен', fg='green')
     elif command == 'display':
-        show_list(students)
+        show_list(line, students)
     elif command == 'select':
-        show_selected(students)
+        show_selected(line, students)
 
 
 if __name__ == '__main__':
