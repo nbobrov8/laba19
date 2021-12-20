@@ -2,10 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import json
-import sys
 import argparse
 import os.path
-import jsonschema
 
 
 def add_student(students, name, group, grade):
@@ -82,42 +80,8 @@ def load_students(file_name):
     Загрузить всех работников из файла JSON
     """
 
-    schema = {
-        "type": "array",
-        "items": [
-            {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "group": {
-                        "type": "string"
-                    },
-                    "grade": {
-                        "type": "string"
-                    }
-                },
-                "required": [
-                    "name",
-                    "group",
-                    "grade"
-                ]
-            }
-        ]
-    }
-
     with open(file_name, "r", encoding="utf-8") as fin:
-        data = json.load(fin)
-    validator = jsonschema.Draft7Validator(schema)
-    try:
-        if not validator.validate(data):
-            print("Successfully!")
-    except jsonschema.exceptions.ValidationError:
-        print("VALIDATION ERROR", file=sys.stderr)
-        exit(1)
-
-    return data
+        return json.load(fin)
 
 
 def main(command_line=None):
