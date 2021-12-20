@@ -81,7 +81,6 @@ def load_students(file_name):
 @click.option("-n", "--name")
 @click.option("-g", "--group")
 @click.option("-gr", "--grade")
-@click.option("-o", "--option")
 def main(command, filename, name, group, grade):
     students = load_students(filename)
     line = '+-{}-+-{}-+-{}-+-{}-+'.format(
