@@ -1,12 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+
 import json
 import click
 
 
-def add_student(students, name, group, grade, file_name):
+@click.group()
+def cli():
+    pass
+
+
+@cli.command()
+@click.argument('filename')
+@click.option("-n", "--name")
+@click.option("-g", "--group")
+@click.option("-gr", "--grade")
+def add(filename, name, group, grade):
     # Запросить данные о студенте.
+    students = load_students(filename)
     students.append(
         {
             'name': name,
@@ -14,13 +26,22 @@ def add_student(students, name, group, grade, file_name):
             'grade': grade,
         }
     )
-    with open(file_name, "w", encoding="utf-8") as fout:
+    with open(filename, "w", encoding="utf-8") as fout:
         json.dump(students, fout, ensure_ascii=False, indent=4)
-    return students
+    click.secho("Студент добавлен", fg='green')
 
 
-def show_list(line, students):
+@cli.command()
+@click.argument('filename')
+def display(filename):
     # Заголовок таблицы.
+    students = load_students(filename)
+    line = '+-{}-+-{}-+-{}-+-{}-+'.format(
+        '-' * 4,
+        '-' * 30,
+        '-' * 20,
+        '-' * 15
+    )
     print(line)
     print(
         '| {:^4} | {:^30} | {:^20} | {:^15} |'.format(
@@ -45,7 +66,16 @@ def show_list(line, students):
     print(line)
 
 
-def show_selected(line, marks):
+@cli.command()
+@click.argument('filename')
+def select(filename):
+    students = load_students(filename)
+    line = '+-{}-+-{}-+-{}-+-{}-+'.format(
+        '-' * 4,
+        '-' * 30,
+        '-' * 20,
+        '-' * 15
+    )
     print(line)
     print(
         '| {:^4} | {:^30} | {:^20} | {:^15} |'.format(
@@ -59,7 +89,7 @@ def show_selected(line, marks):
     # Инициализировать счетчик.
     count = 0
     # Проверить сведения студентов из списка.
-    for student in marks:
+    for student in students:
         grade = list(map(int, student.get('grade', '').split()))
         if sum(grade) / max(len(grade), 1) >= 4.0:
             print(
@@ -70,32 +100,13 @@ def show_selected(line, marks):
     print(line)
 
 
-def load_students(file_name):
-    with open(file_name, "r", encoding="utf-8") as fin:
+def load_students(filename):
+    with open(filename, "r", encoding="utf-8") as fin:
         return json.load(fin)
 
 
-@click.command()
-@click.option("-c", "--command")
-@click.argument('filename')
-@click.option("-n", "--name")
-@click.option("-g", "--group")
-@click.option("-gr", "--grade")
-def main(command, filename, name, group, grade):
-    students = load_students(filename)
-    line = '+-{}-+-{}-+-{}-+-{}-+'.format(
-        '-' * 4,
-        '-' * 30,
-        '-' * 20,
-        '-' * 15
-    )
-    if command == 'add':
-        add_student(students, name, group, grade, filename)
-        click.secho('Студент добавлен', fg='green')
-    elif command == 'display':
-        show_list(line, students)
-    elif command == 'select':
-        show_selected(line, students)
+def main():
+    cli()
 
 
 if __name__ == '__main__':
