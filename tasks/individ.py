@@ -7,6 +7,9 @@ import os.path
 
 
 def add_student(students, name, group, grade):
+    """
+    Запрос данных по трем переменным
+    """
     # Запросить данные о студенте.
     students.append(
         {
@@ -19,6 +22,9 @@ def add_student(students, name, group, grade):
 
 
 def show_list(students):
+    """
+    Показать список студентов
+    """
     # Заголовок таблицы.
     if students:
 
@@ -55,6 +61,9 @@ def show_list(students):
 
 
 def show_selected(students):
+    """
+    Выбрать студента с баллом 4.0 и выше
+    """
     # Инициализировать счетчик.
     count = 0
     # Проверить сведения студентов из списка.
@@ -71,6 +80,9 @@ def show_selected(students):
 
 
 def save_students(file_name, students):
+    """
+    Сохранить список студентов
+    """
     with open(file_name, "w", encoding="utf-8") as fout:
         json.dump(students, fout, ensure_ascii=False, indent=4)
 
@@ -85,6 +97,9 @@ def load_students(file_name):
 
 
 def main(command_line=None):
+    """
+    Создаем парсер для ввода данных
+    """
     # Создать родительский парсер для определения имени файла.
     file_parser = argparse.ArgumentParser(add_help=False)
     file_parser.add_argument(
