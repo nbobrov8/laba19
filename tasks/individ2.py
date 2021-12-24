@@ -17,7 +17,8 @@ def cli():
 @click.option("-g", "--group")
 @click.option("-gr", "--grade")
 def add(filename, name, group, grade):
-    # Запросить данные о студенте.
+    """Запросить данные о студенте"""
+
     students = load_students(filename)
     students.append(
         {
@@ -34,6 +35,9 @@ def add(filename, name, group, grade):
 @cli.command()
 @click.argument('filename')
 def display(filename):
+    """
+    Вывести список студентов
+    """
     # Заголовок таблицы.
     students = load_students(filename)
     line = '+-{}-+-{}-+-{}-+-{}-+'.format(
@@ -69,6 +73,9 @@ def display(filename):
 @cli.command()
 @click.argument('filename')
 def select(filename):
+    """
+    Выбрать студента из списка
+    """
     students = load_students(filename)
     line = '+-{}-+-{}-+-{}-+-{}-+'.format(
         '-' * 4,
@@ -101,6 +108,9 @@ def select(filename):
 
 
 def load_students(filename):
+    """
+    Загрузить список студентов
+    """
     with open(filename, "r", encoding="utf-8") as fin:
         return json.load(fin)
 
