@@ -105,9 +105,5 @@ def load_students(filename):
         return json.load(fin)
 
 
-def main():
-    cli()
-
-
 if __name__ == '__main__':
-    main()
+    cli()

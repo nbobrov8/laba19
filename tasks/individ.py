@@ -98,6 +98,7 @@ def main(command_line=None):
     parser.add_argument(
         "--version",
         action="version",
+        help="The main parser",
         version="%(prog)s 0.1.0"
     )
 
@@ -178,7 +179,6 @@ def main(command_line=None):
     # Выбрать требуемых студентов.
     elif args.command == "select":
         show_selected(students)
-        show_list(students)
 
     # Сохранить данные в файл, если список студентов был изменен.
     if is_dirty:
