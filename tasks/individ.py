@@ -8,9 +8,8 @@ import os.path
 
 def add_student(students, name, group, grade):
     """
-    Запрос данных по трем переменным
+    Добавить данные о студенте
     """
-    # Запросить данные о студенте.
     students.append(
         {
             'name': name,
@@ -23,7 +22,7 @@ def add_student(students, name, group, grade):
 
 def show_list(students):
     """
-    Показать список студентов
+    Вывести список студентов
     """
     # Заголовок таблицы.
     if students:
@@ -62,26 +61,47 @@ def show_list(students):
 
 def show_selected(students):
     """
-    Выбрать студента с баллом 4.0 и выше
+    Отобразить студентов с баллом 4.0 и выше
     """
+    line = '+-{}-+-{}-+-{}-+-{}-+'.format(
+        '-' * 4,
+        '-' * 30,
+        '-' * 20,
+        '-' * 15
+    )
+    print(line)
+    print(
+        '| {:^4} | {:^30} | {:^20} | {:^15} |'.format(
+            "№",
+            "Ф.И.О.",
+            "Группа",
+            "Успеваемость"
+        )
+    )
+    print(line)
     # Инициализировать счетчик.
     count = 0
     # Проверить сведения студентов из списка.
     for student in students:
         grade = list(map(int, student.get('grade', '').split()))
         if sum(grade) / max(len(grade), 1) >= 4.0:
-            print(
-                '{:>4} {}'.format('*', student.get('name', '')),
-                '{:>1} {}'.format('группа №', student.get('group', ''))
-            )
             count += 1
+            print(
+                '| {:>4} | {:<30} | {:<20} | {:>15} |'.format(
+                    count,
+                    student.get('name', ''),
+                    student.get('group', ''),
+                    student.get('grade', 0)
+                )
+            )
+    print(line)
     if count == 0:
         print("Студенты с баллом 4.0 и выше не найдены.")
 
 
 def save_students(file_name, students):
     """
-    Сохранить список студентов
+    Сохранить данные о студенте
     """
     with open(file_name, "w", encoding="utf-8") as fout:
         json.dump(students, fout, ensure_ascii=False, indent=4)
@@ -91,15 +111,11 @@ def load_students(file_name):
     """
     Загрузить всех работников из файла JSON
     """
-
     with open(file_name, "r", encoding="utf-8") as fin:
         return json.load(fin)
 
 
 def main(command_line=None):
-    """
-    Создаем парсер для ввода данных
-    """
     # Создать родительский парсер для определения имени файла.
     file_parser = argparse.ArgumentParser(add_help=False)
     file_parser.add_argument(
