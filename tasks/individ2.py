@@ -17,8 +17,9 @@ def cli():
 @click.option("-g", "--group")
 @click.option("-gr", "--grade")
 def add(filename, name, group, grade):
-    """Запросить данные о студенте"""
-
+    """
+    Запросить данные о студенте
+    """
     students = load_students(filename)
     students.append(
         {
@@ -109,7 +110,7 @@ def select(filename):
 
 def load_students(filename):
     """
-    Загрузить список студентов
+    Загрузить список студентов из файла JSON
     """
     with open(filename, "r", encoding="utf-8") as fin:
         return json.load(fin)
